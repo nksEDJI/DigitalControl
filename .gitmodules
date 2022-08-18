@@ -1,0 +1,3 @@
+[submodule "ProcessosIndustriais"]
+	path = ProcessosIndustriais
+	url = https://github.com/lucasCorreaAssis/ProcessosIndustriais.git
