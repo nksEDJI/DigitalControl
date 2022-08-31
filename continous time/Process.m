@@ -1,23 +1,24 @@
-%% Defining Process and Open loop response
+%% Importando biblioteca para controle de processos.
+addpath 'C:\TFS\Controladores Digitais\ProcessosIndustriais\src'
+
+%% Definindo o processo e resposta em malha aberta
 num = 2;
 den = [1 2 1];
 
-process = tf(num, den);
+processo = tf(num, den);
 
 %               2
 %  H(s) = --------------
 %         s^2 + 2 s + 1
 
-% Open loop output:
+% Resposta em malha aberta:
 figure(1);
-step(process);
+step(processo);
 
-% Simulation time
-time = 0:0.1:30;
+% Tempo de simulação:
+tempo = 0:0.1:30;
 
 %% Process Dynamics
-addpath 'C:\TFS\Controladores Digitais\ProcessosIndustriais\src'
-
 
 % Nesta seção obtemos os parâmetros que definem
 % a dinâmica do processo:
@@ -26,7 +27,7 @@ addpath 'C:\TFS\Controladores Digitais\ProcessosIndustriais\src'
 % tau: constante de tempo
 % k: ganho estático
 
-dynamics = ProcessDynamics(process, time);
+dynamics = ProcessDynamics(processo, tempo);
 dynamics_parameters = dynamics.getDynamicsParameters();
 
 %% Ziegler Nichols
@@ -63,7 +64,7 @@ DERIVATIVE_GAIN = 0;
 % É importante ressaltar que os dados obtidos com
 % a simulação serão salvos no workspace
 
-sim('BaseControl');
+sim('CustomBaseControl');
 
 %% Plotando as respostas no tempo
 
@@ -80,9 +81,31 @@ SimulationVisualizer.plotOutput(Reference, OutputRead);
 
 subplot(312);
 SimulationVisualizer.plotControlSignal(Input);
+fprintf('O valor máximo do sinal de controle é %f\n', max(Input(:,2)));
+
 
 %% Error: e(t)
 
 subplot(313);
 SimulationVisualizer.plotError(Error);
+
+%% Controle de Performance
+
+Rt=Reference(:,2);
+Yt=OutputRead(:,2);
+Ut=Input(:,2);
+
+IAE = sum(abs(Rt-Yt));
+
+ITAE = 0;
+tempo_simulacao = 0:0.01:20;
+for i = 1:size(tempo_simulacao, 2)
+    ITAE = ITAE + abs(Rt(i)-Yt(i)) * tempo_simulacao(i);
+end
+%%
+
+TV = sum(abs(diff(Ut)));
+
+disp('Para o método de ZN, obteve-se:')
+fprintf('IAE: %f   ITAE: %f  TV: %f\n', IAE, ITAE, TV);
 
