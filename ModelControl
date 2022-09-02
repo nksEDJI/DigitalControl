@@ -1,0 +1,44 @@
+syms theta
+syms tau
+syms K
+
+%%CHR servo
+Kp = ((0.6*tau)/(K*theta))
+Ti = tau
+Td = theta/2
+
+%%CHR Regulação
+Kp = ((0.95*tau)/(K*theta))
+Ti = 2.375*theta
+Td = 0.421*theta
+
+%%CHR 20% sobrevalor
+Kp = ((0.95 *tau)/(K*theta))
+Ti = 1.357*tau
+Td = 0.473*theta
+
+%%Cohen e Coon 
+Kp = (1.35+0.25*(theta/tau))*(tau/(K*theta))
+Ti = ((1.35+0.25*(theta/tau))/(0.54+0.33*(theta/tau)))*theta
+Td = (0.5*theta)/(1.35+0.25*(theta/tau))
+
+%%IAE regulação
+Kp = (1/K)*(1.435*(theta/tau)^-0.921)
+Ti = tau/(0.878*(theta/tau)^-0.749)
+Td = tau*(0.482*(theta/tau)^1.137)
+
+%%ITAE regulação
+Kp = (1/K)*(1.357*(theta/tau)^-0.947)
+Ti = tau/(0.842*(theta/tau)^-0.738)
+Td = tau*(0.381*(theta/tau)^0.995)
+
+%%IAE servo
+Kp = (1/K)*(1.086*(theta/tau)^-0.869)
+Ti = tau/(0.740+(-0.130)*(theta/tau))
+Td = tau*(0.348*(theta/tau)^0.914)
+
+%%ITAE servo
+Kp = (1/K)*(0.965*(theta/tau)^-0.850)
+Ti = tau/(0.796+(-0.147)*(theta/tau))
+Td = tau*(0.308*(theta/tau)^0.929)
+
